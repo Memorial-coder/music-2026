@@ -7,12 +7,12 @@ import { Play, Pause, SkipForward } from 'lucide-react';
 
 // The sequence of messages to display
 const MESSAGES = [
-  "再见 2025（可改）",
-  "To XXX",
-  "祝XXX（可改）",
-  "身体健康（可改）",
-  "新年快乐（可改）",
-  "幸福相随！（可改）",
+  "再见 2025",
+  "To 龚家雯",
+  "祝龚家雯",
+  "身体健康",
+  "新年快乐",
+  "一月一号 宜悦宜好！",
   "❤"
 ];
 
@@ -127,7 +127,7 @@ const App: React.FC = () => {
       </div>
       
       <div className="absolute bottom-4 left-0 right-0 text-center text-white/30 text-xs z-20 pointer-events-none">
-        Click anywhere to play • Tap bottom for controls This website is made by Memorial.
+        Click anywhere to play • Tap bottom for controls
       </div>
     </div>
   );
