@@ -7,12 +7,12 @@ import { Play, Pause, SkipForward } from 'lucide-react';
 
 // The sequence of messages to display
 const MESSAGES = [
-  "再见 2025",
-  "To 宝宝",
-  "祝宝宝",
-  "身体健康",
-  "新年快乐",
-  "幸福相随！",
+  "再见 2025（可改）",
+  "To XXX",
+  "祝XXX（可改）",
+  "身体健康（可改）",
+  "新年快乐（可改）",
+  "幸福相随！（可改）",
   "❤"
 ];
 
