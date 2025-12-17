@@ -8,10 +8,10 @@ import { Play, Pause, SkipForward } from 'lucide-react';
 // The sequence of messages to display
 const MESSAGES = [
   "再见 2025",
-  "To 龚家雯",
-  "祝龚家雯",
-  "身体健康",
-  "新年快乐",
+  "To 可改字",
+  "祝 可改字",
+  "身体健康 可改字",
+  "新年快乐 可改字",
   "一月一号 宜悦宜好！",
   "❤"
 ];
