@@ -1,32 +1,120 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>To 可改字</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-      body {
-        margin: 0;
-        overflow: hidden;
-        background-color: #000;
-        touch-action: none; /* Prevent scrolling on mobile */
-      }
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #000;
+            touch-action: none; /* 阻止移动端缩放和滚动 */
+        }
+        /* 全屏按钮样式 */
+        #fs-control-btn {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 9999;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        #fs-control-btn:active {
+            transform: scale(0.9);
+            background: rgba(255, 255, 255, 0.3);
+        }
+        svg {
+            fill: white;
+        }
     </style>
-  <script type="importmap">
-{
-  "imports": {
-    "lucide-react": "https://esm.sh/lucide-react@^0.561.0",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
-    "react/": "https://esm.sh/react@^19.2.3/",
-    "react": "https://esm.sh/react@^19.2.3"
-  }
-}
-</script>
-<link rel="stylesheet" href="/index.css">
+    <script type="importmap">
+    {
+      "imports": {
+        "lucide-react": "https://esm.sh/lucide-react@^0.561.0",
+        "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+        "react/": "https://esm.sh/react@^19.2.3/",
+        "react": "https://esm.sh/react@^19.2.3"
+      }
+    }
+    </script>
+    <link rel="stylesheet" href="/index.css">
 </head>
-  <body>
+<body>
     <div id="root"></div>
-  <script type="module" src="/index.tsx"></script>
+
+    <div id="fs-control-btn" title="切换全屏/横屏">
+        <svg id="fs-icon" viewBox="0 0 24 24" width="24" height="24">
+            <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
+        </svg>
+    </div>
+
+    <script type="module" src="/index.tsx"></script>
+
+    <script>
+        const btn = document.getElementById('fs-control-btn');
+        const icon = document.getElementById('fs-icon');
+
+        async function toggleFullScreen() {
+            try {
+                if (!document.fullscreenElement) {
+                    // 1. 进入全屏
+                    const docElm = document.documentElement;
+                    if (docElm.requestFullscreen) {
+                        await docElm.requestFullscreen();
+                    } else if (docElm.webkitRequestFullscreen) {
+                        await docElm.webkitRequestFullscreen();
+                    }
+
+                    // 2. 尝试强制横屏 (移动端)
+                    if (screen.orientation && screen.orientation.lock) {
+                        await screen.orientation.lock('landscape').catch(err => {
+                            console.log("横屏锁定受限，请开启手机自动旋转");
+                        });
+                    }
+                    
+                    // 修改图标状态 (变为退出全屏图标)
+                    icon.innerHTML = '<path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z"/>';
+                } else {
+                    // 退出全屏
+                    if (document.exitFullscreen) {
+                        await document.exitFullscreen();
+                    } else if (document.webkitExitFullscreen) {
+                        await document.webkitExitFullscreen();
+                    }
+                    
+                    if (screen.orientation && screen.orientation.unlock) {
+                        screen.orientation.unlock();
+                    }
+
+                    // 恢复图标
+                    icon.innerHTML = '<path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>';
+                }
+            } catch (err) {
+                console.error("无法操作全屏:", err);
+            }
+        }
+
+        btn.addEventListener('click', toggleFullScreen);
+
+        // 监听系统全屏变化（如按Esc退出）
+        document.addEventListener('fullscreenchange', () => {
+            if (!document.fullscreenElement) {
+                icon.innerHTML = '<path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>';
+            }
+        });
+    </script>
 </body>
 </html>
